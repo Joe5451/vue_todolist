@@ -1,0 +1,127 @@
+$bg-primary: #AB47BC;
+
+@import 'reset';
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: sans-serif;
+}
+
+body {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: $bg-primary;
+}
+
+.todoapp {
+    position: relative;
+    width: 450px;
+    max-width: 100%;
+    border: 1px solid #BDBDBD;
+    height: 500px;
+    max-height: 100%;
+    background: #fff;
+}
+
+.todoapp-head {
+    ul {
+        display: flex;
+        
+        li {
+            width: 33.33%;
+            padding: 8px;
+            text-align: center;
+            border-bottom: 2px solid #BDBDBD;
+            cursor: pointer;
+            background: #E0E0E0;
+            
+            &:not(:last-child) {
+                border-right: 2px solid #BDBDBD;
+            }
+
+            
+
+            &.active {
+                background: #fff;
+                border-bottom: 0;
+            }
+        }
+    }
+}
+
+.todoapp-body {
+    padding: 15px;
+}
+
+.todo-item {
+    display: flex;
+    // justify-content: space-between;
+    padding: 8px;
+
+    .todo-checked {
+        display: none;
+    }
+
+    .todo-checked:checked + .custom-checkbox:before {
+        display: block;
+    }
+
+    .custom-checkbox {
+        display: block;
+        width: 20px;
+        height: 20px;
+        border: 1px solid rgba(0,0,0,.5);
+        border-radius: 3px;
+        position: relative;
+        margin-right: 10px;
+        
+        &:before {
+            display: none;
+            content: "";
+            width: 5px;
+            height: 10px;
+            border-right: 2px solid $bg-primary;
+            border-bottom: 2px solid $bg-primary;
+            position: absolute;
+            top: 1px;
+            left: 5px;
+            transform: rotate(40deg);
+        }
+    }
+
+
+
+    .delete-btn {
+        margin-left: auto;
+        color: #ef5350;
+        cursor: pointer;
+    }
+}
+
+.add-btn {
+    width: 70px;
+    height: 70px;
+    background: #FFCC80;
+    border-radius: 50%;
+    color: #fff;
+    line-height: 70px;
+    text-align: center;
+    font-size: 2rem;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    transition: background 0.3s;
+    cursor: pointer;
+
+    &:hover {
+        background: #FFB74D;
+    }
+}
+
