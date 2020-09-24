@@ -41,8 +41,8 @@
                 </li>
             </transition-group> -->
 
-            <transition-group tag="ul">
-                <li class="todo-item" v-for="todo in todos" :key="todo.id" @click.self="editTodo(todo)">
+            <transition-group tag="ul" class="todo-items-container">
+                <li class="todo-item" v-cloak v-for="todo in todos" :key="todo.id" @click.self="editTodo(todo)">
                     <input type="checkbox" class="todo-checked" v-model="todo.completed" :id="todo.id">
                     <label :for="todo.id" class="custom-checkbox"></label>
                     <div class="todo-title">{{ todo.title }}</div>
@@ -53,7 +53,7 @@
             </transition-group>
         </div>
 
-        <transition name="height">
+        <transition name="height" v-cloak>
             <div class="edit-todo" v-show="edit_mode">
                 <input type="text" class="title" v-model="edit_todo.title" spellcheck="false" placeholder="What needs to be done?">
                 <textarea name="" rows="10" class="content" v-model="edit_todo.content" spellcheck="false" placeholder="input content..."></textarea>
@@ -66,6 +66,8 @@
             </div>
         </transition>
 
+        <div class="transparent-bg" v-cloak v-show='edit_mode'></div>
+
         <div class="add-btn" @click="edit_mode = 'add'">
             <i class="fas fa-plus"></i>
         </div>
@@ -74,6 +76,8 @@
             <i class="fas fa-plus"></i>
         </div> -->
         <!-- <button @click="clearTodos">clear</button> -->
+        <button @click="addTest">addTest</button>
+
     </div>
 
 <script>
@@ -98,8 +102,6 @@
     // let todos = todoStorage.getTodos();
     // console.log(todos);
 
-
-
     const app = new Vue({
         data() {
             return {
@@ -111,7 +113,8 @@
                     content: '',
                     completed: false,
                     id: ''
-                }
+                },
+                todo: {}
             }
         },
         methods: {
@@ -124,10 +127,11 @@
             },
             editTodo(todo) {
                 this.edit_mode = 'save';
+                this.todo = todo; // 用於 updateTodo() 時，使用 indexOf() 找到要更新的索引
                 this.edit_todo = { ...todo };
             },
             updateTodo() {
-                const index = this.edit_todo.id;
+                const index = this.todos.indexOf(this.todo);
                 this.todos.splice(index, 1, { ...this.edit_todo });
                 this.resetEditTodo();
             },
@@ -143,106 +147,22 @@
                     completed: false,
                     id: ''
                 }
+            },
+            addTest() {
+                const vm = this;
+                this.edit_todo = {
+                    title: `test${this.id_length}`,
+                    content: `test content ${this.id_length} !`,
+                    completed: false,
+                    id: this.id_length
+                }
+
+                this.todos.push({ ...this.edit_todo });
+                console.log(this.todos);
+                this.id_length++;
+                this.resetEditTodo();
             }
         }
-        // computed: {
-        //     todos_reverse() {
-        //         // let todos_reverse = [...this.todos];
-        //         return this.todos;
-        //     }
-        // },
-        // methods: {
-        //     showTodos() {
-        //         const vm = this;
-        //         this.todos.push({todo: vm.count, id: vm.count});
-        //         vm.count++;
-        //         let str = vm.todos.toString();
-        //         console.log(str);
-        //     },
-        //     clearTodos() {
-        //         // this.todos = [];
-        //         this.todos = [
-        //             {
-        //                 title: 'test0',
-        //                 content: 'test...',
-        //                 completed: false,
-        //                 id: 0
-        //             },
-        //             {
-        //                 title: 'test1',
-        //                 content: 'test...',
-        //                 completed: true,
-        //                 id: 1
-        //             },
-        //             {
-        //                 title: 'test2',
-        //                 content: 'test...',
-        //                 completed: true,
-        //                 id: 2
-        //             },
-        //             {
-        //                 title: 'test3',
-        //                 content: 'test...',
-        //                 completed: false,
-        //                 id: 3
-        //             },
-        //             {
-        //                 title: 'test4',
-        //                 content: 'test...',
-        //                 completed: true,
-        //                 id: 4
-        //             },
-        //             {
-        //                 title: 'test5',
-        //                 content: 'test...',
-        //                 completed: false,
-        //                 id: 5
-        //             },
-        //             {
-        //                 title: 'test6',
-        //                 content: 'test...',
-        //                 completed: true,
-        //                 id: 6
-        //             },
-        //             {
-        //                 title: 'test7',
-        //                 content: 'test...',
-        //                 completed: true,
-        //                 id: 7
-        //             }
-        //         ]
-        //     },
-        //     addTodo() {
-        //         // console.log(this.edit_todo);
-        //         this.todos.push(Object.assign({}, this.edit_todo, {id: this.todos.length}));
-               
-        //         console.log(this.todos);
-        //     },
-        //      updateTodo() {
-        //         console.log(this.edit_todo.id, this.edit_todo);
-        //         let newTodo = { ...this.edit_todo };
-        //         this.todos.splice(this.edit_todo.id, 1, newTodo);
-        //     },
-        //     deleteTodo(todo) {
-        //         // const index = e.currentTarget.dataset.index;
-        //         // this.todos.splice(index, 1);
-        //         this.todos.splice(this.todos.indexOf(todo), 1);
-        //         console.log(this.todos);
-        //     },
-        //     editTodo() {
-        //         console.log(this.edit_mode);
-        //         if (this.edit_mode === 'add') {
-        //             this.addTodo();
-        //         } else if (this.edit_mode === 'save') {
-        //             // console.log(this.edit_todo);
-        //             // console.log({...this.edit_todo});
-        //             this.updateTodo();
-        //         }
-
-        //         this.edit_todo.title = this.edit_todo.content = this.edit_todo.id = '';
-        //         this.edit_mode = '';
-        //     }
-        // }
     });
 
     app.$mount('#app');

@@ -63,13 +63,25 @@ body {
 
 .todoapp-body {
     padding: 15px;
-    overflow: hidden;
+    overflow: auto;
+    height: 400px;
+    max-height: 80%;
+}
+
+.todo-items-container {
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .todo-item {
     display: flex;
+    align-items: center;
     padding: 12px;
     cursor: pointer;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 5px rgba(0,0,0,.1);
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 100px;
 
     &:hover {
         background: #EEEEEE;
@@ -86,13 +98,15 @@ body {
     .custom-checkbox {
         flex-shrink: 0;
         display: block;
-        width: 20px;
-        height: 20px;
-        border: 1px solid rgba(0,0,0,.5);
-        border-radius: 3px;
+        width: 25px;
+        height: 25px;
+        border: 1px solid rgba(0,0,0,.1);
         position: relative;
-        margin-right: 10px;
-        
+        margin-right: 20px;
+        border-radius: 50%;
+        box-shadow: 0 5px 5px rgba(0,0,0,.1);
+        cursor: pointer;
+
         &:before {
             display: none;
             content: "";
@@ -101,8 +115,8 @@ body {
             border-right: 2px solid $bg-primary;
             border-bottom: 2px solid $bg-primary;
             position: absolute;
-            top: 1px;
-            left: 5px;
+            top: 4px;
+            left: 8px;
             transform: rotate(40deg);
         }
 
@@ -145,6 +159,7 @@ body {
 
 .edit-todo {
     position: absolute;
+    z-index: 1000;
     left: 0;
     top: 50%;
     transform: translateY(-50%);
@@ -195,8 +210,18 @@ body {
     }
 }
 
+.transparent-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,.5);
+    z-index: 900;
+}
+
 .v-enter-active, .v-leave-active {
-    transition: opacity 1s;
+    transition: opacity 0.7s;
 }
 
 .v-enter, .v-leave-to {
@@ -204,11 +229,19 @@ body {
 }
 
 .height-enter-active, .height-leave-active {
-    transition: all 1s;
+    transition: all 0.7s;
 }
 
 .height-enter, .height-leave-to {
     // transform: translateY(-50%) translateX(-100%);
     height: 0;
     opacity: 0;
+}
+
+.height-enter-to, .v-enter-to {
+    opacity: 1;
+}
+
+[v-cloak] {
+    display: none;
 }
