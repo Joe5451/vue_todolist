@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./public/stylesheets/all.css">
 </head>
 <body>
-    <div class="todoapp">
+    <div class="todoapp" id="app">
         <div class="todoapp-head">
             <ul>
                 <li class="active">ALL</li>
@@ -17,7 +17,7 @@
             </ul>
         </div>
         <div class="todoapp-body">
-            <ul>
+            <!-- <ul>
                 <li class="todo-item">
                     <input type="checkbox" class="todo-checked" name="" id="item1">
                     <label for="item1" class="custom-checkbox"></label>
@@ -42,12 +42,107 @@
                         <i class="fas fa-trash-alt"></i>
                     </div>
                 </li>
-            </ul>
-            
+            </ul> -->
+            <!-- {{todos}} -->
+            <transition-group tag="ul">
+                <li class="todo-item" v-for="todo in todos_reverse" :key="todo.id">
+                    <input type="checkbox" class="todo-checked" name="" :id="todo.id">
+                    <label :for="todo.id" class="custom-checkbox"></label>
+                    <div class="todo-title">{{ todo.title }}</div>
+                    <div class="delete-btn" @click="deleteTodo(todo)">
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
+                </li>
+            </transition-group>
         </div>
-        <div class="add-btn">
+
+        <transition name="height">
+            <div class="edit-todo" v-show="edit_mode">
+                <input type="text" class="title" v-model="edit_todo.title" placeholder="What needs to be done?">
+                <textarea name="" rows="10" class="content" v-model="edit_todo.content" spellcheck="false" placeholder="input content..."></textarea>
+                <div class="edit-footer">
+                    <button class="edit-btn" @click="addTodo" :disabled="!edit_todo.title">ADD</button>
+                    <button class="cancel-btn" @click="edit_mode = null">CANCEL</button>
+                </div>
+            </div>
+        </transition>
+
+        <div class="add-btn" @click="edit_mode = 'add'">
             <i class="fas fa-plus"></i>
         </div>
+        <button @click="clearTodos">clear</button>
     </div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    const STORAGE_KEY = "vue-todolist";
+    const todoStorage = {
+        getTodos() {
+            let todos = JSON.parse(localStorage.getItem(STORAGE_KEY))||[];
+            todos.forEach((item, index) => {
+                item.id = index;
+            })
+
+            return todos;
+        },
+        saveTodos(todos) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+        }
+    }
+
+    // todoItems = [{todo: 'haha'}, {todo: 'test'}, {todo: 'asd'}];
+    // todoStorage.save(todoItems);
+
+    // let todos = todoStorage.getTodos();
+    // console.log(todos);
+
+
+
+    const app = new Vue({
+        data() {
+            return {
+                todos: [],
+                count: 0,
+                edit_mode: null,
+                edit_todo: {
+                    title: '',
+                    content: ''
+                }
+            }
+        },
+        computed: {
+            todos_reverse() {
+                let todos_reverse = [...this.todos];
+                return todos_reverse.reverse();
+            }
+        },
+        methods: {
+            showTodos() {
+                const vm = this;
+                this.todos.push({todo: vm.count, id: vm.count});
+                vm.count++;
+                let str = vm.todos.toString();
+                console.log(str);
+            },
+            clearTodos() {
+                this.todos = [];
+            },
+            addTodo() {
+                // console.log(this.edit_todo);
+                this.todos.push(Object.assign({}, this.edit_todo, {id: this.todos.length}));
+                this.edit_todo.title = this.edit_todo.content = '';
+                console.log(this.todos);
+            },
+            deleteTodo(todo) {
+                // const index = e.currentTarget.dataset.index;
+                // this.todos.splice(index, 1);
+                this.todos.splice(this.todos.indexOf(todo), 1);
+                console.log(this.todos);
+            }
+        }
+    });
+
+    app.$mount('#app');
+</script>
 </body>
 </html>

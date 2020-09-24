@@ -27,9 +27,13 @@ body {
     height: 500px;
     max-height: 100%;
     background: #fff;
+    border-radius: 10px;
 }
 
 .todoapp-head {
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+
     ul {
         display: flex;
         
@@ -37,12 +41,14 @@ body {
             width: 33.33%;
             padding: 8px;
             text-align: center;
-            border-bottom: 2px solid #BDBDBD;
+            border-bottom: 1px solid #BDBDBD;
             cursor: pointer;
             background: #E0E0E0;
+            overflow: hidden;
+            font-size: 12px;
             
             &:not(:last-child) {
-                border-right: 2px solid #BDBDBD;
+                border-right: 1px solid #BDBDBD;
             }
 
             
@@ -57,12 +63,13 @@ body {
 
 .todoapp-body {
     padding: 15px;
+    overflow: hidden;
 }
 
 .todo-item {
     display: flex;
-    // justify-content: space-between;
     padding: 8px;
+    
 
     .todo-checked {
         display: none;
@@ -125,3 +132,72 @@ body {
     }
 }
 
+.edit-todo {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #BDBDBD;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 314px;
+
+    .title, .content {
+        padding: 12px 8px;
+        margin-bottom: 20px;
+    }
+
+    .title {
+        height: 35px;
+    }
+
+    .content {
+        resize: none;
+    }
+
+    .edit-footer {
+        display: flex;
+        
+        .edit-btn, .cancel-btn {
+            width: 50%;
+            padding: 8px 10px;
+            border: 0;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background: #29B6F6;
+            
+            &:disabled {
+                opacity: 0.5;
+            }
+        }
+
+        .cancel-btn {
+            background: #ef5350;
+        }
+    }
+}
+
+.v-enter-active, .v-leave-active {
+    transition: opacity 1s;
+}
+
+.v-enter, .v-leave-to {
+    opacity: 0;
+}
+
+.height-enter-active, .height-leave-active {
+    transition: all 1s;
+}
+
+.height-enter, .height-leave-to {
+    // transform: translateY(-50%) translateX(-100%);
+    height: 0;
+    opacity: 0;
+}

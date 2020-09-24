@@ -77,8 +77,13 @@ body {
   height: 500px;
   max-height: 100%;
   background: #fff;
+  border-radius: 10px;
 }
 
+.todoapp-head {
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+}
 .todoapp-head ul {
   display: flex;
 }
@@ -86,12 +91,14 @@ body {
   width: 33.33%;
   padding: 8px;
   text-align: center;
-  border-bottom: 2px solid #BDBDBD;
+  border-bottom: 1px solid #BDBDBD;
   cursor: pointer;
   background: #E0E0E0;
+  overflow: hidden;
+  font-size: 12px;
 }
 .todoapp-head ul li:not(:last-child) {
-  border-right: 2px solid #BDBDBD;
+  border-right: 1px solid #BDBDBD;
 }
 .todoapp-head ul li.active {
   background: #fff;
@@ -100,6 +107,7 @@ body {
 
 .todoapp-body {
   padding: 15px;
+  overflow: hidden;
 }
 
 .todo-item {
@@ -157,6 +165,67 @@ body {
 }
 .add-btn:hover {
   background: #FFB74D;
+}
+
+.edit-todo {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #BDBDBD;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 314px;
+}
+.edit-todo .title, .edit-todo .content {
+  padding: 12px 8px;
+  margin-bottom: 20px;
+}
+.edit-todo .title {
+  height: 35px;
+}
+.edit-todo .content {
+  resize: none;
+}
+.edit-todo .edit-footer {
+  display: flex;
+}
+.edit-todo .edit-footer .edit-btn, .edit-todo .edit-footer .cancel-btn {
+  width: 50%;
+  padding: 8px 10px;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+}
+.edit-todo .edit-footer .edit-btn {
+  background: #29B6F6;
+}
+.edit-todo .edit-footer .edit-btn:disabled {
+  opacity: 0.5;
+}
+.edit-todo .edit-footer .cancel-btn {
+  background: #ef5350;
+}
+
+.v-enter-active, .v-leave-active {
+  transition: opacity 1s;
+}
+
+.v-enter, .v-leave-to {
+  opacity: 0;
+}
+
+.height-enter-active, .height-leave-active {
+  transition: all 1s;
+}
+
+.height-enter, .height-leave-to {
+  height: 0;
+  opacity: 0;
 }
 
 /*# sourceMappingURL=all.css.map */
