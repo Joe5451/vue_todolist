@@ -68,8 +68,12 @@ body {
 
 .todo-item {
     display: flex;
-    padding: 8px;
-    
+    padding: 12px;
+    cursor: pointer;
+
+    &:hover {
+        background: #EEEEEE;
+    }
 
     .todo-checked {
         display: none;
@@ -80,6 +84,7 @@ body {
     }
 
     .custom-checkbox {
+        flex-shrink: 0;
         display: block;
         width: 20px;
         height: 20px;
@@ -100,13 +105,19 @@ body {
             left: 5px;
             transform: rotate(40deg);
         }
+
     }
-
-
+    
+    .todo-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
     .delete-btn {
         margin-left: auto;
         color: #ef5350;
+        padding: 8px;
         cursor: pointer;
     }
 }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <title>ToDoList</title>
     <script src="https://kit.fontawesome.com/b22ce6914a.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <link rel="stylesheet" href="./public/stylesheets/all.css">
 </head>
 <body>
@@ -19,22 +20,6 @@
         <div class="todoapp-body">
             <!-- <ul>
                 <li class="todo-item">
-                    <input type="checkbox" class="todo-checked" name="" id="item1">
-                    <label for="item1" class="custom-checkbox"></label>
-                    <div class="todo-title">some thing ...</div>
-                    <div class="delete-btn">
-                        <i class="fas fa-trash-alt"></i>
-                    </div>
-                </li>
-                <li class="todo-item">
-                    <input type="checkbox" class="todo-checked" name="" id="item2">
-                    <label for="item2" class="custom-checkbox"></label>
-                    <div class="todo-title">some thing ...</div>
-                    <div class="delete-btn">
-                        <i class="fas fa-trash-alt"></i>
-                    </div>
-                </li>
-                <li class="todo-item">
                     <input type="checkbox" class="todo-checked" name="" id="item3">
                     <label for="item3" class="custom-checkbox"></label>
                     <div class="todo-title">some thing ...</div>
@@ -43,10 +28,22 @@
                     </div>
                 </li>
             </ul> -->
+
             <!-- {{todos}} -->
+            <!-- <transition-group tag="ul">
+                <li class="todo-item" v-for="(todo,index) in todos" :key="index" @click.self="edit_mode = 'save';edit_todo = { ...todo };">
+                    <input type="checkbox" class="todo-checked" v-model="todo.completed" :id="index">
+                    <label :for="index" class="custom-checkbox"></label>
+                    <div class="todo-title">{{ todo.title }}</div>
+                    <div class="delete-btn" @click="deleteTodo(todo)">
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
+                </li>
+            </transition-group> -->
+
             <transition-group tag="ul">
-                <li class="todo-item" v-for="todo in todos_reverse" :key="todo.id">
-                    <input type="checkbox" class="todo-checked" name="" :id="todo.id">
+                <li class="todo-item" v-for="todo in todos" :key="todo.id" @click.self="editTodo(todo)">
+                    <input type="checkbox" class="todo-checked" v-model="todo.completed" :id="todo.id">
                     <label :for="todo.id" class="custom-checkbox"></label>
                     <div class="todo-title">{{ todo.title }}</div>
                     <div class="delete-btn" @click="deleteTodo(todo)">
@@ -58,11 +55,13 @@
 
         <transition name="height">
             <div class="edit-todo" v-show="edit_mode">
-                <input type="text" class="title" v-model="edit_todo.title" placeholder="What needs to be done?">
+                <input type="text" class="title" v-model="edit_todo.title" spellcheck="false" placeholder="What needs to be done?">
                 <textarea name="" rows="10" class="content" v-model="edit_todo.content" spellcheck="false" placeholder="input content..."></textarea>
                 <div class="edit-footer">
-                    <button class="edit-btn" @click="addTodo" :disabled="!edit_todo.title">ADD</button>
-                    <button class="cancel-btn" @click="edit_mode = null">CANCEL</button>
+                    <button class="edit-btn" @click="addTodo" :disabled="!edit_todo.title" v-show="edit_mode == 'add'">{{edit_mode.toUpperCase()}}</button>
+                    <button class="edit-btn" @click="updateTodo" :disabled="!edit_todo.title" v-show="edit_mode == 'save'">{{edit_mode.toUpperCase()}}</button>
+
+                    <button class="cancel-btn" @click="resetEditTodo">CANCEL</button>
                 </div>
             </div>
         </transition>
@@ -70,10 +69,13 @@
         <div class="add-btn" @click="edit_mode = 'add'">
             <i class="fas fa-plus"></i>
         </div>
-        <button @click="clearTodos">clear</button>
+
+        <!-- <div class="add-btn" @click="edit_mode = 'add'">
+            <i class="fas fa-plus"></i>
+        </div> -->
+        <!-- <button @click="clearTodos">clear</button> -->
     </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script>
     const STORAGE_KEY = "vue-todolist";
     const todoStorage = {
@@ -102,44 +104,145 @@
         data() {
             return {
                 todos: [],
-                count: 0,
-                edit_mode: null,
+                id_length: 0,
+                edit_mode: '',
                 edit_todo: {
                     title: '',
-                    content: ''
+                    content: '',
+                    completed: false,
+                    id: ''
                 }
             }
         },
-        computed: {
-            todos_reverse() {
-                let todos_reverse = [...this.todos];
-                return todos_reverse.reverse();
-            }
-        },
         methods: {
-            showTodos() {
-                const vm = this;
-                this.todos.push({todo: vm.count, id: vm.count});
-                vm.count++;
-                let str = vm.todos.toString();
-                console.log(str);
-            },
-            clearTodos() {
-                this.todos = [];
-            },
             addTodo() {
-                // console.log(this.edit_todo);
-                this.todos.push(Object.assign({}, this.edit_todo, {id: this.todos.length}));
-                this.edit_todo.title = this.edit_todo.content = '';
-                console.log(this.todos);
+                this.edit_todo.id = this.id_length;
+                this.todos.push(Object.assign({}, this.edit_todo));
+                this.id_length++;
+                this.resetEditTodo();
+                console.log('todos', this.todos, 'edittodo', this.edit_todo);
+            },
+            editTodo(todo) {
+                this.edit_mode = 'save';
+                this.edit_todo = { ...todo };
+            },
+            updateTodo() {
+                const index = this.edit_todo.id;
+                this.todos.splice(index, 1, { ...this.edit_todo });
+                this.resetEditTodo();
             },
             deleteTodo(todo) {
-                // const index = e.currentTarget.dataset.index;
-                // this.todos.splice(index, 1);
-                this.todos.splice(this.todos.indexOf(todo), 1);
-                console.log(this.todos);
+                const index = this.todos.indexOf(todo);
+                this.todos.splice(index, 1);
+            },
+            resetEditTodo() {
+                this.edit_mode = '';
+                this.edit_todo = {
+                    title: '',
+                    content: '',
+                    completed: false,
+                    id: ''
+                }
             }
         }
+        // computed: {
+        //     todos_reverse() {
+        //         // let todos_reverse = [...this.todos];
+        //         return this.todos;
+        //     }
+        // },
+        // methods: {
+        //     showTodos() {
+        //         const vm = this;
+        //         this.todos.push({todo: vm.count, id: vm.count});
+        //         vm.count++;
+        //         let str = vm.todos.toString();
+        //         console.log(str);
+        //     },
+        //     clearTodos() {
+        //         // this.todos = [];
+        //         this.todos = [
+        //             {
+        //                 title: 'test0',
+        //                 content: 'test...',
+        //                 completed: false,
+        //                 id: 0
+        //             },
+        //             {
+        //                 title: 'test1',
+        //                 content: 'test...',
+        //                 completed: true,
+        //                 id: 1
+        //             },
+        //             {
+        //                 title: 'test2',
+        //                 content: 'test...',
+        //                 completed: true,
+        //                 id: 2
+        //             },
+        //             {
+        //                 title: 'test3',
+        //                 content: 'test...',
+        //                 completed: false,
+        //                 id: 3
+        //             },
+        //             {
+        //                 title: 'test4',
+        //                 content: 'test...',
+        //                 completed: true,
+        //                 id: 4
+        //             },
+        //             {
+        //                 title: 'test5',
+        //                 content: 'test...',
+        //                 completed: false,
+        //                 id: 5
+        //             },
+        //             {
+        //                 title: 'test6',
+        //                 content: 'test...',
+        //                 completed: true,
+        //                 id: 6
+        //             },
+        //             {
+        //                 title: 'test7',
+        //                 content: 'test...',
+        //                 completed: true,
+        //                 id: 7
+        //             }
+        //         ]
+        //     },
+        //     addTodo() {
+        //         // console.log(this.edit_todo);
+        //         this.todos.push(Object.assign({}, this.edit_todo, {id: this.todos.length}));
+               
+        //         console.log(this.todos);
+        //     },
+        //      updateTodo() {
+        //         console.log(this.edit_todo.id, this.edit_todo);
+        //         let newTodo = { ...this.edit_todo };
+        //         this.todos.splice(this.edit_todo.id, 1, newTodo);
+        //     },
+        //     deleteTodo(todo) {
+        //         // const index = e.currentTarget.dataset.index;
+        //         // this.todos.splice(index, 1);
+        //         this.todos.splice(this.todos.indexOf(todo), 1);
+        //         console.log(this.todos);
+        //     },
+        //     editTodo() {
+        //         console.log(this.edit_mode);
+        //         if (this.edit_mode === 'add') {
+        //             this.addTodo();
+        //         } else if (this.edit_mode === 'save') {
+        //             // console.log(this.edit_todo);
+        //             // console.log({...this.edit_todo});
+        //             this.updateTodo();
+        //         }
+
+        //         this.edit_todo.title = this.edit_todo.content = this.edit_todo.id = '';
+        //         this.edit_mode = '';
+        //     }
+        // }
     });
 
     app.$mount('#app');
