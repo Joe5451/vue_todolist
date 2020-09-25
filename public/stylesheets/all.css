@@ -66,7 +66,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #AB47BC;
+  background: #1976D2;
 }
 
 .todoapp {
@@ -112,6 +112,20 @@ body {
   height: 500px;
   max-height: 90%;
 }
+.todoapp-body::-webkit-scrollbar {
+  width: 10px;
+  background: #fff;
+}
+.todoapp-body::-webkit-scrollbar-track {
+  background: #fff;
+}
+.todoapp-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+.todoapp-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
 
 .todo-items-container {
   display: flex;
@@ -138,6 +152,10 @@ body {
 .todo-item .todo-checked:checked + .custom-checkbox:before {
   display: block;
 }
+.todo-item .todo-checked:checked + .custom-checkbox {
+  background: #1DE9B6;
+  border-color: #1DE9B6;
+}
 .todo-item .custom-checkbox {
   flex-shrink: 0;
   display: block;
@@ -155,8 +173,8 @@ body {
   content: "";
   width: 5px;
   height: 10px;
-  border-right: 2px solid #AB47BC;
-  border-bottom: 2px solid #AB47BC;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
   position: absolute;
   top: 4px;
   left: 8px;
@@ -169,29 +187,30 @@ body {
 }
 .todo-item .delete-btn {
   margin-left: auto;
-  color: #ef5350;
+  color: #1DE9B6;
   padding: 8px;
   cursor: pointer;
 }
 
 .add-btn {
-  width: 70px;
-  height: 70px;
-  background: #FFCC80;
+  width: 65px;
+  height: 65px;
+  background: #1976D2;
   border-radius: 50%;
   color: #fff;
-  line-height: 70px;
+  line-height: 65px;
   text-align: center;
-  font-size: 2rem;
+  font-size: 25px;
   position: absolute;
-  bottom: 0;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  transition: background 0.3s;
+  transition: all 0.3s;
   cursor: pointer;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
 }
 .add-btn:hover {
-  background: #FFB74D;
+  background: #1DE9B6;
 }
 
 .edit-todo {

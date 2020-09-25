@@ -114,6 +114,9 @@
                 this.id_length++;
                 this.resetEditTodo();
                 console.log('todos', this.todos, 'edittodo', this.edit_todo);
+
+                const todoapp_body = document.querySelector('.todoapp-body');
+                todoapp_body.scrollTop = 0;
             },
             editTodo(todo) {
                 this.edit_mode = 'save';
