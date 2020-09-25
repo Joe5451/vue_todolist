@@ -28,6 +28,7 @@ body {
     max-height: 100%;
     background: #fff;
     border-radius: 10px;
+    background-image: linear-gradient(0deg ,rgba(0,0,0,0.09) 15%, transparent 25%);
 }
 
 .todoapp-head {
@@ -64,8 +65,8 @@ body {
 .todoapp-body {
     padding: 15px;
     overflow: auto;
-    height: 400px;
-    max-height: 80%;
+    height: 500px;
+    max-height: 90%;
 }
 
 .todo-items-container {
@@ -84,7 +85,8 @@ body {
     border-radius: 100px;
 
     &:hover {
-        background: #EEEEEE;
+        background: rgba(0,0,0,.03);
+        background-image: linear-gradient()
     }
 
     .todo-checked {
@@ -148,7 +150,7 @@ body {
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translate(-50%, 50%);
+    transform: translateX(-50%);
     transition: background 0.3s;
     cursor: pointer;
 

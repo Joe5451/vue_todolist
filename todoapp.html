@@ -12,40 +12,17 @@
     <div class="todoapp" id="app">
         <div class="todoapp-head">
             <ul>
-                <li class="active">ALL</li>
-                <li>TO BE DONE</li>
-                <li>COMPLETED</li>
+                <li :class="{active: visibility == 'all'}" @click="visibility = 'all'">ALL</li>
+                <li :class="{active: visibility == 'tobedone'}" @click="visibility = 'tobedone'">TO BE DONE</li>
+                <li :class="{active: visibility == 'completed'}" @click="visibility = 'completed'">COMPLETED</li>
             </ul>
         </div>
         <div class="todoapp-body">
-            <!-- <ul>
-                <li class="todo-item">
-                    <input type="checkbox" class="todo-checked" name="" id="item3">
-                    <label for="item3" class="custom-checkbox"></label>
-                    <div class="todo-title">some thing ...</div>
-                    <div class="delete-btn">
-                        <i class="fas fa-trash-alt"></i>
-                    </div>
-                </li>
-            </ul> -->
-
-            <!-- {{todos}} -->
-            <!-- <transition-group tag="ul">
-                <li class="todo-item" v-for="(todo,index) in todos" :key="index" @click.self="edit_mode = 'save';edit_todo = { ...todo };">
-                    <input type="checkbox" class="todo-checked" v-model="todo.completed" :id="index">
-                    <label :for="index" class="custom-checkbox"></label>
-                    <div class="todo-title">{{ todo.title }}</div>
-                    <div class="delete-btn" @click="deleteTodo(todo)">
-                        <i class="fas fa-trash-alt"></i>
-                    </div>
-                </li>
-            </transition-group> -->
-
             <transition-group tag="ul" class="todo-items-container">
-                <li class="todo-item" v-cloak v-for="todo in todos" :key="todo.id" @click.self="editTodo(todo)">
+                <li class="todo-item" v-cloak v-for="todo in filterTodos" :key="todo.id" @click.self="editTodo(todo)">
                     <input type="checkbox" class="todo-checked" v-model="todo.completed" :id="todo.id">
                     <label :for="todo.id" class="custom-checkbox"></label>
-                    <div class="todo-title">{{ todo.title }}</div>
+                    <div class="todo-title" @click.self="editTodo(todo)">{{ todo.title }}</div>
                     <div class="delete-btn" @click="deleteTodo(todo)">
                         <i class="fas fa-trash-alt"></i>
                     </div>
@@ -60,7 +37,6 @@
                 <div class="edit-footer">
                     <button class="edit-btn" @click="addTodo" :disabled="!edit_todo.title" v-show="edit_mode == 'add'">{{edit_mode.toUpperCase()}}</button>
                     <button class="edit-btn" @click="updateTodo" :disabled="!edit_todo.title" v-show="edit_mode == 'save'">{{edit_mode.toUpperCase()}}</button>
-
                     <button class="cancel-btn" @click="resetEditTodo">CANCEL</button>
                 </div>
             </div>
@@ -71,13 +47,7 @@
         <div class="add-btn" @click="edit_mode = 'add'">
             <i class="fas fa-plus"></i>
         </div>
-
-        <!-- <div class="add-btn" @click="edit_mode = 'add'">
-            <i class="fas fa-plus"></i>
-        </div> -->
-        <!-- <button @click="clearTodos">clear</button> -->
-        <button @click="addTest">addTest</button>
-
+        <!-- <button @click="addTest">addTest</button> -->
     </div>
 
 <script>
@@ -85,9 +55,11 @@
     const todoStorage = {
         getTodos() {
             let todos = JSON.parse(localStorage.getItem(STORAGE_KEY))||[];
-            todos.forEach((item, index) => {
-                item.id = index;
-            })
+            todos.forEach((todo, index) => {
+                todo.id = index;
+            });
+
+            todoStorage.id_length = todos.length;
 
             return todos;
         },
@@ -96,17 +68,12 @@
         }
     }
 
-    // todoItems = [{todo: 'haha'}, {todo: 'test'}, {todo: 'asd'}];
-    // todoStorage.save(todoItems);
-
-    // let todos = todoStorage.getTodos();
-    // console.log(todos);
-
     const app = new Vue({
         data() {
             return {
-                todos: [],
-                id_length: 0,
+                todos: todoStorage.getTodos(),
+                // todos: [],
+                id_length: todoStorage.id_length,
                 edit_mode: '',
                 edit_todo: {
                     title: '',
@@ -114,7 +81,30 @@
                     completed: false,
                     id: ''
                 },
-                todo: {}
+                todo: {},
+                visibility: 'all'
+            }
+        },
+        computed: {
+            filterTodos() {
+                if (this.visibility == 'all') return this.todos;
+                else if (this.visibility == 'tobedone') {
+                    return this.todos.filter(todo => {
+                        return !todo.completed;
+                    });
+                } else if (this.visibility == 'completed') {
+                    return this.todos.filter(todo => {
+                        return todo.completed;
+                    });
+                }
+            }
+        },
+        watch: {
+            todos: {
+                handler: function(todos) {
+                    todoStorage.saveTodos(todos);
+                },
+                deep: true
             }
         },
         methods: {
@@ -148,20 +138,20 @@
                     id: ''
                 }
             },
-            addTest() {
-                const vm = this;
-                this.edit_todo = {
-                    title: `test${this.id_length}`,
-                    content: `test content ${this.id_length} !`,
-                    completed: false,
-                    id: this.id_length
-                }
+            // addTest() {
+            //     const vm = this;
+            //     this.edit_todo = {
+            //         title: `test${this.id_length}`,
+            //         content: `test content ${this.id_length} !`,
+            //         completed: false,
+            //         id: this.id_length
+            //     }
 
-                this.todos.push({ ...this.edit_todo });
-                console.log(this.todos);
-                this.id_length++;
-                this.resetEditTodo();
-            }
+            //     this.todos.push({ ...this.edit_todo });
+            //     console.log(this.todos);
+            //     this.id_length++;
+            //     this.resetEditTodo();
+            // }
         }
     });
 
