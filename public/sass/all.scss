@@ -25,7 +25,7 @@ body {
     width: 450px;
     max-width: 100%;
     border: 1px solid #BDBDBD;
-    height: 500px;
+    height: 550px;
     max-height: 100%;
     background: #fff;
     border-radius: 10px;
@@ -48,12 +48,18 @@ body {
             background: #E0E0E0;
             overflow: hidden;
             font-size: 12px;
+            display: flex;
+            flex-direction: column;
+
+            &>i {
+                font-size: 24px;
+                margin-bottom: 10px;
+                color: $bg-primary;
+            }
             
             &:not(:last-child) {
                 border-right: 1px solid #BDBDBD;
             }
-
-            
 
             &.active {
                 background: #fff;
@@ -66,7 +72,7 @@ body {
 .todoapp-body {
     padding: 15px;
     overflow: auto;
-    height: 500px;
+    height: 420px;
     max-height: 90%;
 
     &::-webkit-scrollbar {

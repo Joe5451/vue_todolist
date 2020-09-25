@@ -12,9 +12,16 @@
     <div class="todoapp" id="app">
         <div class="todoapp-head">
             <ul>
-                <li :class="{active: visibility == 'all'}" @click="visibility = 'all'">ALL</li>
-                <li :class="{active: visibility == 'tobedone'}" @click="visibility = 'tobedone'">TO BE DONE</li>
-                <li :class="{active: visibility == 'completed'}" @click="visibility = 'completed'">COMPLETED</li>
+                <li :class="{active: visibility == 'all'}" @click="visibility = 'all'">
+                    <i class="fas fa-list-ul"></i>ALL
+                </li>
+                <li :class="{active: visibility == 'tobedone'}" @click="visibility = 'tobedone'">
+                    <i class="far fa-calendar"></i>TO BE DONE
+                </li>
+                <li :class="{active: visibility == 'completed'}" @click="visibility = 'completed'">
+                    <i class="fas fa-calendar-check"></i>
+                    COMPLETED
+                </li>
             </ul>
         </div>
         <div class="todoapp-body">
@@ -51,12 +58,6 @@
     </div>
 
 <script>
-    window.onload=function(){
-		setTimeout(function() {
-			window.scrollTo(0, 1)
-		}, 0);
-	};
-    
     const STORAGE_KEY = "vue-todolist";
     const todoStorage = {
         getTodos() {
@@ -93,6 +94,9 @@
         },
         computed: {
             filterTodos() {
+                const todoapp_body = document.querySelector('.todoapp-body');
+                todoapp_body.scrollTop = 0;
+
                 if (this.visibility == 'all') return this.todos;
                 else if (this.visibility == 'tobedone') {
                     return this.todos.filter(todo => {
@@ -121,8 +125,8 @@
                 this.resetEditTodo();
                 console.log('todos', this.todos, 'edittodo', this.edit_todo);
 
-                const todoapp_body = document.querySelector('.todoapp-body');
-                todoapp_body.scrollTop = 0;
+                // const todoapp_body = document.querySelector('.todoapp-body');
+                // todoapp_body.scrollTop = 0;
             },
             editTodo(todo) {
                 this.edit_mode = 'save';
