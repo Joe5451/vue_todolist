@@ -51,6 +51,12 @@
     </div>
 
 <script>
+    window.onload=function(){
+		setTimeout(function() {
+			window.scrollTo(0, 1)
+		}, 0);
+	};
+    
     const STORAGE_KEY = "vue-todolist";
     const todoStorage = {
         getTodos() {
