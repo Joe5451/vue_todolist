@@ -116,8 +116,7 @@ body {
 .todoapp-body {
   padding: 15px;
   overflow: auto;
-  height: 420px;
-  max-height: 90%;
+  height: calc(100% - 80px);
 }
 .todoapp-body::-webkit-scrollbar {
   width: 8px;
@@ -162,6 +161,9 @@ body {
 .todo-item .todo-checked:checked + .custom-checkbox {
   background: #1DE9B6;
   border-color: #1DE9B6;
+}
+.todo-item .todo-checked:checked ~ .todo-title {
+  color: rgba(0, 0, 0, 0.3);
 }
 .todo-item .custom-checkbox {
   flex-shrink: 0;
@@ -283,16 +285,16 @@ body {
   opacity: 0;
 }
 
-.height-enter-active, .height-leave-active {
+.expand-enter-active, .expand-leave-active {
   transition: all 0.7s;
 }
 
-.height-enter, .height-leave-to {
+.expand-enter, .expand-leave-to {
   height: 0;
   opacity: 0;
 }
 
-.height-enter-to, .v-enter-to {
+.expand-enter-to, .v-enter-to {
   opacity: 1;
 }
 

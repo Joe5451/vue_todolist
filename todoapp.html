@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="theme-color" content="#1976D2" />
+    <meta name="msapplication-navbutton-color" content="#1976D2">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#1976D2">
     <title>ToDoList</title>
     <script src="https://kit.fontawesome.com/b22ce6914a.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -19,8 +22,7 @@
                     <i class="far fa-calendar"></i>TO BE DONE
                 </li>
                 <li :class="{active: visibility == 'completed'}" @click="visibility = 'completed'">
-                    <i class="fas fa-calendar-check"></i>
-                    COMPLETED
+                    <i class="fas fa-calendar-check"></i>COMPLETED
                 </li>
             </ul>
         </div>
@@ -37,7 +39,7 @@
             </transition-group>
         </div>
 
-        <transition name="height" v-cloak>
+        <transition name="expand" v-cloak>
             <div class="edit-todo" v-show="edit_mode">
                 <input type="text" class="title" v-model="edit_todo.title" spellcheck="false" placeholder="What needs to be done?">
                 <textarea name="" rows="10" class="content" v-model="edit_todo.content" spellcheck="false" placeholder="input content..."></textarea>
@@ -54,7 +56,6 @@
         <div class="add-btn" @click="edit_mode = 'add'">
             <i class="fas fa-plus"></i>
         </div>
-        <!-- <button @click="addTest">addTest</button> -->
     </div>
 
 <script>
@@ -79,7 +80,6 @@
         data() {
             return {
                 todos: todoStorage.getTodos(),
-                // todos: [],
                 id_length: todoStorage.id_length,
                 edit_mode: '',
                 edit_todo: {
@@ -94,9 +94,6 @@
         },
         computed: {
             filterTodos() {
-                const todoapp_body = document.querySelector('.todoapp-body');
-                todoapp_body.scrollTop = 0;
-
                 if (this.visibility == 'all') return this.todos;
                 else if (this.visibility == 'tobedone') {
                     return this.todos.filter(todo => {
@@ -119,14 +116,13 @@
         },
         methods: {
             addTodo() {
+                const todoapp_body = document.querySelector('.todoapp-body');
                 this.edit_todo.id = this.id_length;
                 this.todos.push(Object.assign({}, this.edit_todo));
                 this.id_length++;
                 this.resetEditTodo();
-                console.log('todos', this.todos, 'edittodo', this.edit_todo);
 
-                // const todoapp_body = document.querySelector('.todoapp-body');
-                // todoapp_body.scrollTop = 0;
+                todoapp_body.scrollTop = 0;
             },
             editTodo(todo) {
                 this.edit_mode = 'save';
@@ -150,21 +146,7 @@
                     completed: false,
                     id: ''
                 }
-            },
-            // addTest() {
-            //     const vm = this;
-            //     this.edit_todo = {
-            //         title: `test${this.id_length}`,
-            //         content: `test content ${this.id_length} !`,
-            //         completed: false,
-            //         id: this.id_length
-            //     }
-
-            //     this.todos.push({ ...this.edit_todo });
-            //     console.log(this.todos);
-            //     this.id_length++;
-            //     this.resetEditTodo();
-            // }
+            }
         }
     });
 
