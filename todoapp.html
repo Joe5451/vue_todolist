@@ -51,6 +51,10 @@
             </div>
         </transition>
 
+        <transition>
+            <button class="clear-btn" v-cloak @click="clearCompletedTodos" v-if="visibility == 'completed'">Clear</button>
+        </transition>
+
         <div class="transparent-bg" v-cloak v-show='edit_mode'></div>
 
         <div class="add-btn" @click="edit_mode = 'add'">

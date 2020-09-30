@@ -85,6 +85,9 @@ const app = new Vue({
                 completed: false,
                 id: ''
             }
+        },
+        clearCompletedTodos() {
+            this.todos = this.todos.filter(todo => todo.completed == false);
         }
     }
 });

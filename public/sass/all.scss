@@ -193,6 +193,16 @@ body {
     }
 }
 
+.clear-btn {
+    position: absolute;
+    bottom: 40px;
+    right: 25px;
+    padding: 8px 12px;
+    border-radius: 100px;
+    cursor: pointer;
+    outline: none;
+}
+
 .edit-todo {
     position: absolute;
     z-index: 1000;
