@@ -230,6 +230,13 @@ body {
   border-radius: 100px;
   cursor: pointer;
   outline: none;
+  background: #1DE9B6;
+  color: #fff;
+  border: none;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+}
+.clear-btn:hover {
+  background: #00BFA5;
 }
 
 .edit-todo {

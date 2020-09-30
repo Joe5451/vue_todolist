@@ -201,6 +201,14 @@ body {
     border-radius: 100px;
     cursor: pointer;
     outline: none;
+    background: $bg-secondary;
+    color: #fff;
+    border: none;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+        background: #00BFA5;
+    }
 }
 
 .edit-todo {
